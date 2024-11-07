@@ -11,7 +11,8 @@ import java.util.Random;
 public class Main {
     private static final String fileName = "resources/wordlist.txt";
     private static final List<String> words = loadWordsFromFile(fileName);
-    private static final String TARGET_WORD = getTargetWord(words);
+    private static final String TARGET_WORD = getTargetWord(words).toUpperCase();
+    private static final int length = TARGET_WORD.length();
     private static final int MAX_ATTEMPTS = 6;
     private int attemptCount = 0;
     private JPanel gridPanel;
@@ -43,19 +44,19 @@ public class Main {
 
     public void createAndShowGUI() {
         JFrame frame  = new JFrame("Java Wordle");
-        frame.setSize(400,600);
+        frame.setSize(600,500);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        gridPanel = new JPanel(new GridLayout(MAX_ATTEMPTS, 5));
-        inputField = new JTextField(5);
+        gridPanel = new JPanel(new GridLayout(MAX_ATTEMPTS, length));
+        inputField = new JTextField(length);
         submitButton = new JButton("Submit");
 
         submitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String guess = inputField.getText().trim().toLowerCase();
-                if (guess.length() != 5) {
-                    JOptionPane.showMessageDialog(frame, "Please enter a 5 letter word.");
+                String guess = inputField.getText().trim().toUpperCase();
+                if (guess.length() != length) {
+                    JOptionPane.showMessageDialog(frame, "Please enter a " + length + " letter word.");
                     return;
                 }
 
@@ -87,7 +88,7 @@ public class Main {
 
     private void addGuessToGrid(String guess) {
         JPanel guessPanel = new JPanel(new GridLayout(1, 5));
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < length; i++) {
             JLabel letterLabel = new JLabel(String.valueOf(guess.charAt(i)), SwingConstants.CENTER);
             letterLabel.setOpaque(true);
             if (guess.charAt(i) == TARGET_WORD.charAt(i)) {
