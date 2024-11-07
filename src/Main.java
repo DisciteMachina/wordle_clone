@@ -1,11 +1,10 @@
 import javax.swing.*;
+import java.util.*;
+import javax.swing.text.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.io.*;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.List; // why does this have to be specially imported??
 
 // make the length of guess = to target word
 public class Main {
@@ -18,6 +17,7 @@ public class Main {
     private JPanel gridPanel;
     private JTextField inputField;
     private JButton submitButton;
+    private JLabel displayLength;
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new Main().createAndShowGUI());
@@ -47,9 +47,12 @@ public class Main {
         frame.setSize(600,500);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
+        displayLength = new JLabel("The length of the word is: " + length);
         gridPanel = new JPanel(new GridLayout(MAX_ATTEMPTS, length));
         inputField = new JTextField(length);
         submitButton = new JButton("Submit");
+
+        ((AbstractDocument) inputField.getDocument()).setDocumentFilter(new AlphabeticDocumentFilter());
 
         submitButton.addActionListener(new ActionListener() {
             @Override
@@ -80,6 +83,7 @@ public class Main {
         JPanel inputPanel = new JPanel();
         inputPanel.add(inputField);
         inputPanel.add(submitButton);
+        inputPanel.add(displayLength);
 
         frame.add(gridPanel, BorderLayout.CENTER);
         frame.add(inputPanel, BorderLayout.SOUTH);
@@ -105,5 +109,25 @@ public class Main {
         gridPanel.add(guessPanel);
         gridPanel.revalidate();
         gridPanel.repaint();
+    }
+}
+
+class AlphabeticDocumentFilter extends DocumentFilter {
+    @Override
+    public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+        if (isAlphabetic(string)) {
+            super.insertString(fb, offset, string, attr);
+        }
+    }
+
+    @Override
+    public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+        if (isAlphabetic(text)) {
+            super.replace(fb, offset, length, text, attrs);
+        }
+    }
+
+    private boolean isAlphabetic(String text) {
+        return text != null && text.matches("[a-zA-Z]+"); // Allow only alphabetic characters
     }
 }
