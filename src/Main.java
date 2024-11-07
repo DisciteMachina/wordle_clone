@@ -66,7 +66,7 @@ public class Main {
                 if (attemptCount < MAX_ATTEMPTS) {
                     addGuessToGrid(guess);
                     if (guess.equals(TARGET_WORD)) {
-                        JOptionPane.showMessageDialog(frame, "Congratulations! You guess the word!");
+                        JOptionPane.showMessageDialog(frame, "Congratulations! You guessed the word!");
                         submitButton.setEnabled(false);
                     } else {
                         attemptCount ++;
@@ -112,6 +112,9 @@ public class Main {
     }
 }
 
+
+// ONLY [A-Z]
+// I do not know how this works
 class AlphabeticDocumentFilter extends DocumentFilter {
     @Override
     public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
@@ -128,6 +131,6 @@ class AlphabeticDocumentFilter extends DocumentFilter {
     }
 
     private boolean isAlphabetic(String text) {
-        return text != null && text.matches("[a-zA-Z]+"); // Allow only alphabetic characters
+        return text != null && text.matches("[a-zA-Z]+");
     }
 }
