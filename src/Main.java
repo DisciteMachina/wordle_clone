@@ -56,6 +56,10 @@ public class Main {
         return words.get(random.nextInt(words.size()));
     }
 
+    public static boolean isValidWord(String guess) {
+        return words.contains(guess.toLowerCase());
+    }
+
     public void createAndShowGUI() {
         JFrame frame  = new JFrame("Java Wordle");
         frame.setSize(600,500);
@@ -78,6 +82,12 @@ public class Main {
                     JOptionPane.showMessageDialog(frame, "Please enter a " + TARGET_WORD.length() + " letter word.");
                     return;
                 }
+
+                if (!isValidWord(guess)) {
+                    JOptionPane.showMessageDialog(frame, "Please enter a valid word");
+                    return;
+                }
+
                 if (attemptCount < MAX_ATTEMPTS) {
                     addGuessToGrid(guess);
                     if (guess.equals(TARGET_WORD)) {
